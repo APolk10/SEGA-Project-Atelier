@@ -11,10 +11,10 @@ CREATE TABLE Reviews (
   review_id INT PRIMARY KEY,
   product_id INT,
   rating INT,
-  summary VARCHAR(61),
+  summary TEXT,
   recommend TEXT,
   response TEXT,
-  body VARCHAR(1001),
+  body TEXT,
   "date" DATE,
   helpfulness INT
 );
