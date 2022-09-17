@@ -42,14 +42,24 @@ CREATE TABLE Metadata (
 
 CREATE TABLE Users (
   review_id INT,
-  emailAddress text,
-  reviewerName text
+  emailAddress TEXT,
+  reviewerName TEXT
 );
   -- FOREIGN KEY (review_id)
   -- REFERENCES Reviews (review_id)
 
-CREATE TABLE Characteristics (
   -- two tables?
-  FOREIGN KEY (review_id)
-  REFERENCES Reviews (review_id)
+CREATE TABLE Characteristics (
+  characteristic_id INT,
+  product_id INT,
+  "name" TEXT
+);
+  -- FOREIGN KEY (review_id)
+  -- REFERENCES Reviews (review_id)
+
+CREATE TABLE Characteristics_Reviews (
+  id INT,
+  characteristic_id INT,
+  review_id INT,
+  "value" INT
 );
