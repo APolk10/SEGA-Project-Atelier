@@ -36,15 +36,9 @@ class RatingsReviews extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.product !== prevProps.product) {
-      axios.get('https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfc/reviews', {
-        headers: {'Authorization': `${API_KEY}`},
-        params: {
-          count: 50,
-          // page: 1,
-          product_id: this.props.product.id,
-          sort: 'relevant'
-        }})
+      axios.get(`http://localhost:8080/reviews/${this.props.product.id}`) // edited to allow express access to id
       .then((res) => {
+        console.log('HELPS!!!');
         this.setState({reviews: res.data.results})
         this.allReviews = res.data.results
       })
@@ -58,19 +52,13 @@ class RatingsReviews extends React.Component {
     e.preventDefault();
     let sortMethod = e.target.value
     this.setState({ sort: sortMethod });
-    axios.get('https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfc/reviews', {
-      headers: {'Authorization': `${API_KEY}`},
-      params: {
-        // count: 10,
-        product_id: this.props.product.id,
-        sort: sortMethod
-      }})
-    .then((res) => {
-      console.log('resorted reviews!')
-      this.setState({ reviews: res.data.results })
-    })
-    .catch((err) =>
-      console.log(err));
+    // axios.get(`http://localhost:8080/sortreviews/${this.props.product.id}/${this.state.sort}`) // edited to allow express access to id
+    // .then((res) => {
+    //   console.log('resorted reviews!')
+    //    this.setState({ reviews: res.data.results })
+    // })
+    // .catch((err) =>
+    //   console.log(err));
   }
 
   toggleReviewModal() {
