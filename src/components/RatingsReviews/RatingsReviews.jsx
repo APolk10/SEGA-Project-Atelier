@@ -45,19 +45,19 @@ class RatingsReviews extends React.Component {
         console.log(err));
     }
   }
-
+ // currently not working correctly, express is not even receiving this request
   handleSort(e) {
     handleInteractions(e, 'Reviews');
     e.preventDefault();
     let sortMethod = e.target.value
     this.setState({ sort: sortMethod });
-    // axios.get(`http://localhost:8080/sortreviews/${this.props.product.id}/${this.state.sort}`) // edited to allow express access to id
-    // .then((res) => {
-    //   console.log('resorted reviews!')
-    //    this.setState({ reviews: res.data.results })
-    // })
-    // .catch((err) =>
-    //   console.log(err));
+    axios.get(`http://localhost:8080/sortreviews/${this.props.product.id}/${sortMethod}`) // edited to allow express access to id
+    .then((res) => {
+      console.log('resorted reviews!')
+       this.setState({ reviews: res.data.results })
+    })
+    .catch((err) =>
+      console.log(err));
   }
 
   toggleReviewModal() {

@@ -15,7 +15,7 @@ app.get('/reviews/:productID', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getReviews(selectedProduct)
-    .then((results) => console.log('DB sent back reviews in this format:', results))
+    .then((results) => console.log('DB sent back reviews in this format:', results.rows)) // array of objects
     .catch((error) => res.send(error))
 });
 // Sort reviews
