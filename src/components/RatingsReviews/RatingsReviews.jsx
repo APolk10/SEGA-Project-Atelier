@@ -38,7 +38,6 @@ class RatingsReviews extends React.Component {
     if (this.props.product !== prevProps.product) {
       axios.get(`http://localhost:8080/reviews/${this.props.product.id}`) // edited to allow express access to id
       .then((res) => {
-        console.log('HELPS!!!');
         this.setState({reviews: res.data.results})
         this.allReviews = res.data.results
       })

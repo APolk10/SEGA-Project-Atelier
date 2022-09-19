@@ -10,41 +10,53 @@ app.use(express.json());
 app.use(cors()); // this stopped me from being able to connect
 app.use(express.static('./public'))
 
-
-// Send request to the
+// GET reviews
 app.get('/reviews/:productID', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getReviews(selectedProduct)
-    .then((results) => res.send(results))
+    .then((results) => console.log('DB sent back reviews in this format:', results))
     .catch((error) => res.send(error))
 });
-
+// Sort reviews
 app.get('/sortreviews/:productID/:sortType', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
-  Rar.getReviews(selectedProduct)
-    .then((reviews) => res.send({data: { results : reviews.rows }}))
+  Rar.getSortedReviews(selectedProduct)
+    .then((reviews) => console.log('DB sent back sorted reviews in this format:', reviews))
+    .catch((error) => console.log(error));
 });
-
+// GET metadata
 app.get('/reviews/meta', (req, res) => {
-  console.log(req.body);
-  // send data to controllers to format
+  console.log(req.params);
+  let selectedProduct = req.params;
+  Rar.getMeta(selectedProduct)
+    .then((metadata) => console.log('DB sent back metadata in this format:', metadata))
+    .catch((error) => console.log(error));
 });
-
-app.post(`/reviews/helpful`, (req, res) => {
+// Post helpful
+app.put(`/reviews/helpful`, (req, res) => {
   console.log(req.body);
-  // send data to controllers to format
+  let productToPromote = req.body;
+  Rar.logHelpfulReview(productToPromote)
+    .then((results) => console.log('DB sent back incremented helpful counter in this format:', results))
+    .catch((error) => console.log(error));
 });
-
+// Post new review
 app.post('/reviews', (req, res) => {
   console.log(req.body);
-  // send data to controllers to format
+  let newReview = req.body;
+  Rar.addNewReview(newReview)
+    .then((results) => console.log('DB sent back new review confirmation in this format:', results))
+    .catch((error) => console.log(error));
 });
-
-app.post('/reviews/report', (req, res) => {
+// Report review
+app.put('/reviews/report', (req, res) => {
   console.log(req.body);
-  // send data to controllers to format
+  let productToReport = req.body;
+  Rar.reportReview(productToReport)
+    .then((results) => console.log('DB sent back reported review confirmation in this format:', results))
+    .catch((error) => console.log(error));
 });
 
 const PORT = 8080;
