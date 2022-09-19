@@ -51,7 +51,7 @@ class RatingsReviews extends React.Component {
     e.preventDefault();
     let sortMethod = e.target.value
     this.setState({ sort: sortMethod });
-    axios.get(`http://localhost:8080/sortreviews/${this.props.product.id}/${sortMethod}`) // edited to allow express access to id
+    axios.get(`http://localhost:8080/sortReviews/${this.props.product.id}/${sortMethod}`) // edited to allow express access to id
     .then((res) => {
       console.log('resorted reviews!')
        this.setState({ reviews: res.data.results })

@@ -19,7 +19,7 @@ app.get('/reviews/:productID', (req, res) => {
     .catch((error) => res.send(error))
 });
 // Sort reviews
-app.get('/sortreviews/:productID/:sortType', (req, res) => {
+app.get('/sortReviews/:productID/:sortType', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getSortedReviews(selectedProduct)
@@ -27,11 +27,19 @@ app.get('/sortreviews/:productID/:sortType', (req, res) => {
     .catch((error) => console.log(error));
 });
 // GET metadata
-app.get('/reviews/meta', (req, res) => {
+app.get('/reviews/meta/:productID', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getMeta(selectedProduct)
     .then((metadata) => console.log('DB sent back metadata in this format:', metadata))
+    .catch((error) => console.log(error));
+});
+// Post new review
+app.post('/addReview', (req, res) => {
+  console.log(req.body);
+  let newReview = req.body;
+  Rar.addNewReview(newReview)
+    .then((results) => console.log('DB sent back new review confirmation in this format:', results))
     .catch((error) => console.log(error));
 });
 // Post helpful
@@ -40,14 +48,6 @@ app.put(`/reviews/helpful`, (req, res) => {
   let productToPromote = req.body;
   Rar.logHelpfulReview(productToPromote)
     .then((results) => console.log('DB sent back incremented helpful counter in this format:', results))
-    .catch((error) => console.log(error));
-});
-// Post new review
-app.post('/reviews', (req, res) => {
-  console.log(req.body);
-  let newReview = req.body;
-  Rar.addNewReview(newReview)
-    .then((results) => console.log('DB sent back new review confirmation in this format:', results))
     .catch((error) => console.log(error));
 });
 // Report review
