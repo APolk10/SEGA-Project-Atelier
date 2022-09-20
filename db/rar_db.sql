@@ -7,7 +7,7 @@ CREATE TABLE Products (
   "name" TEXT
 );
 
-CREATE TABLE Reviews (
+CREATE TABLE Reviews ( -- should have kept reported/name/email the other table made it difficult
   review_id INT PRIMARY KEY,
   product_id INT,
   rating INT,

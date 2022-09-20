@@ -31,7 +31,7 @@ const rarModel = {
   },
   getReviewsByMetric: function(productAndMetric) {
     // sort database entries that are acquired (like above) by helpfulness, date, and relevance
-    return;
+   return client.query(`SELECT * FROM Reviews WHERE product_id = 66642 ORDER BY helpfulness DESC`);
   },
   getMetaData: function(id) {
     return client.query(
@@ -75,12 +75,12 @@ const rarModel = {
             )
           )
       );`
-      );
+    );
   },
   markAsHelpful: function(id) {
     return; // client.query(``)
   },
-  addReview: function(review) { // Essential
+  addReview: function(review) {
     let dateToAdd = new Date();
     let params = [
       review.product_id, // 1
@@ -93,7 +93,6 @@ const rarModel = {
       0, // 8
       // review.photos, // 8
     ];
-    console.log(params);
     let text = `INSERT INTO Reviews (product_id, rating, summary, recommend, response, body, date, helpfulness) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
     return client.query(text, params);
   },

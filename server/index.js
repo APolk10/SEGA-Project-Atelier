@@ -23,8 +23,8 @@ app.get('/sortReviews/:productID/:sortType', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getSortedReviews(selectedProduct)
-    .then((reviews) => res.send('DB sent back sorted reviews in this format:', reviews))
-    .catch((error) => console.log(error));
+    .then((reviews) => res.status(200).send(reviews))
+    .catch((error) => res.end(error));
 });
 // GET metadata
 app.get('/reviews/meta/:productID', (req, res) => {
@@ -39,7 +39,7 @@ app.post('/addReview', (req, res) => {
   console.log(req);
   let newReview = req.body;
   Rar.addNewReview(newReview)
-    .then((results) => console.log('DB sent back new review confirmation in this format:', results))
+    .then((results) => res.status(201).send('Review Added'))
     .catch((error) => console.log(error));
 });
 // Post helpful
