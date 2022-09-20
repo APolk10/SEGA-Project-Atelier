@@ -3,7 +3,7 @@ import { check, group, sleep, fail } from 'k6';
 
 
 export const options = {
-  vus: 10,
+  vus: 30,
   duration: '30s',
 }
 

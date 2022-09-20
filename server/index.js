@@ -15,7 +15,7 @@ app.get('/reviews/:productID', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getReviews(selectedProduct)
-    .then((results) => res.send('DB sent back reviews in this format:', results.rows)) // array of objects
+    .then((results) => res.status(200).send(results.rows[0].json_build_object)) // array of objects
     .catch((error) => res.send(error))
 });
 // Sort reviews
@@ -31,12 +31,12 @@ app.get('/reviews/meta/:productID', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getMeta(selectedProduct)
-    .then((metadata) => res.send(metadata.rows))
+    .then((metadata) => res.status(200).send(metadata.rows))
     .catch((error) => console.log(error));
 });
 // Post new review
 app.post('/addReview', (req, res) => {
-  console.log(req.body);
+  console.log(req);
   let newReview = req.body;
   Rar.addNewReview(newReview)
     .then((results) => console.log('DB sent back new review confirmation in this format:', results))

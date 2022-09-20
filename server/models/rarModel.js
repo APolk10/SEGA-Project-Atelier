@@ -4,25 +4,33 @@ const rarModel = {
 
   getReviewsByID: function(id) {
     return client.query(
-    `SELECT
-      review_id,
-      rating,
-      summary,
-      recommend,
-      response,
-      body,
-      date,
-      helpfulness,
-      (SELECT json_agg(json_build_object(
-        'id', Photos.image_id,
-        'url', Photos.url))
-      FROM Photos
-      WHERE Photos.review_id = Reviews.review_id) AS Photos
-    FROM Reviews
-    WHERE Reviews.product_id = ${id};`
+    `SELECT json_build_object(
+        'product', ${id},
+        'results',
+        (SELECT json_agg(json_build_object(
+          'review_id', review_id,
+          'rating', rating,
+          'summary', summary,
+          'recommend', recommend,
+          'response', response,
+          'body', body,
+          'date', date,
+          'helpfulness', helpfulness,
+          'photos',
+          (SELECT json_agg(json_build_object(
+            'id', Photos.image_id,
+            'url', Photos.url))
+          FROM Photos
+          WHERE Photos.review_id = Reviews.review_id)
+          ))
+        FROM Reviews
+        WHERE Reviews.product_id = ${id}
+      )
+  );`
       )
   },
   getReviewsByMetric: function(productAndMetric) {
+    // sort database entries that are acquired (like above) by helpfulness, date, and relevance
     return;
   },
   getMetaData: function(id) {
@@ -73,7 +81,21 @@ const rarModel = {
     return; // client.query(``)
   },
   addReview: function(review) { // Essential
-    return; // client.query(``)
+    let dateToAdd = new Date();
+    let params = [
+      review.product_id, // 1
+      review.rating, // 2
+      review.summary, // 3
+      review.recommend, // 4
+      review.response, // 5
+      review.body, // 6
+      dateToAdd, // 7
+      0, // 8
+      // review.photos, // 8
+    ];
+    console.log(params);
+    let text = `INSERT INTO Reviews (product_id, rating, summary, recommend, response, body, date, helpfulness) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
+    return client.query(text, params);
   },
   reportReview: function(id) {
     return; // client.query(``)
@@ -83,20 +105,21 @@ const rarModel = {
 module.exports = rarModel;
 
 
-// sub objects(#)
-//         characteristics
-//           sub objects
-//             sub...
-// `SELECT
-// product_id,
-// (SELECT json_build_object(
-//   '1', (SELECT COUNT(*) FROM Reviews WHERE rating = 1),
-//   '2', (SELECT COUNT(*) FROM Reviews WHERE rating = 2),
-//   '3', (SELECT COUNT(*) FROM Reviews WHERE rating = 3),
-//   '4', (SELECT COUNT(*) FROM Reviews WHERE rating = 4),
-//   '5', (SELECT COUNT(*) FROM Reviews WHERE rating = 5)
-// )
-// FROM Reviews
-// WHERE Reviews.product_id = ${parseInt(id)}) AS ratings
-// FROM Reviews
-// WHERE Reviews.product_id = ${parseInt(id)};`
+// return client.query(
+//   `SELECT
+//     review_id,
+//     rating,
+//     summary,
+//     recommend,
+//     response,
+//     body,
+//     date,
+//     helpfulness,
+//     (SELECT json_agg(json_build_object(
+//       'id', Photos.image_id,
+//       'url', Photos.url))
+//     FROM Photos
+//     WHERE Photos.review_id = Reviews.review_id) AS Photos
+//   FROM Reviews
+//   WHERE Reviews.product_id = ${id};`
+//     )
