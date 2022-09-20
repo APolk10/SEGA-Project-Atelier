@@ -9,6 +9,12 @@ const { Client } = require('pg');
 //   database: process.env.DB_NAME,
 // });
 
+// CREATE INDEX productID_idx ON Reviews (product_id);
+// CREATE INDEX rating_idx ON Reviews (rating);
+// CREATE INDEX photoID_idx ON Photos (review_id);
+// CREATE INDEX find_char_ID_idx ON Characteristics (product_id);
+// CREATE INDEX find_charRev_ID_idx ON Characteristics_Reviews (characteristic_id);
+
 const client = new Client({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -18,5 +24,4 @@ const client = new Client({
 
 client.connect();
 
-// module.exports = sql;
  module.exports = client;

@@ -15,7 +15,7 @@ app.get('/reviews/:productID', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getReviews(selectedProduct)
-    .then((results) => console.log('DB sent back reviews in this format:', results.rows)) // array of objects
+    .then((results) => res.send('DB sent back reviews in this format:', results.rows)) // array of objects
     .catch((error) => res.send(error))
 });
 // Sort reviews
@@ -23,7 +23,7 @@ app.get('/sortReviews/:productID/:sortType', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getSortedReviews(selectedProduct)
-    .then((reviews) => console.log('DB sent back sorted reviews in this format:', reviews))
+    .then((reviews) => res.send('DB sent back sorted reviews in this format:', reviews))
     .catch((error) => console.log(error));
 });
 // GET metadata
@@ -31,7 +31,7 @@ app.get('/reviews/meta/:productID', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getMeta(selectedProduct)
-    .then((metadata) => console.log('DB sent back metadata in this format:', metadata.rows))
+    .then((metadata) => res.send(metadata.rows))
     .catch((error) => console.log(error));
 });
 // Post new review

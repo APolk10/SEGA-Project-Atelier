@@ -15,9 +15,9 @@ const rarController = {
     return Rar.getReviewsByMetric(sortParam);
   },
   getMeta: function(id) {
-    console.log('CONTROLLER getMeta activated:', id);
+    console.log('CONTROLLER getMeta activated:', parseInt(id.productID));
     // request metadata for given product id
-    return Rar.getMetaData(id);
+    return Rar.getMetaData(parseInt(id.productID));
   },
   logHelpfulReview: function(id) {
     console.log('CONTROLLER logHelpfulReview activated:', id);
