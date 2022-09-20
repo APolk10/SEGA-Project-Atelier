@@ -31,7 +31,7 @@ app.get('/reviews/meta/:productID', (req, res) => {
   console.log(req.params);
   let selectedProduct = req.params;
   Rar.getMeta(selectedProduct)
-    .then((metadata) => console.log('DB sent back metadata in this format:', metadata))
+    .then((metadata) => console.log('DB sent back metadata in this format:', metadata.rows))
     .catch((error) => console.log(error));
 });
 // Post new review

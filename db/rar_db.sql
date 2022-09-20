@@ -16,6 +16,7 @@ CREATE TABLE Reviews (
   response TEXT,
   body TEXT,
   "date" DATE,
+  reviewer_name TEXT,
   helpfulness INT
 );
   -- FOREIGN KEY (product_id)

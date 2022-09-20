@@ -2,8 +2,7 @@ const client = require('../rar_db.js');
 
 const rarModel = {
 
-  getReviewsByID: function(id) { // Essential
-    // return client.query(`SELECT * FROM Reviews LEFT JOIN Photos ON Photos.review_id=Reviews.review_id WHERE Reviews.product_id=66642;`)
+  getReviewsByID: function(id) {
     return client.query(
     `SELECT
       review_id,
@@ -12,46 +11,65 @@ const rarModel = {
       recommend,
       response,
       body,
-      (SELECT Users.reviewerName FROM Users WHERE Users.review_id = Reviews.review_id) AS reviewer_name,
       date,
       helpfulness,
       (SELECT json_agg(json_build_object(
         'id', Photos.image_id,
         'url', Photos.url))
       FROM Photos
-      WHERE Photos.review_id = reviews.review_id) AS Photos
+      WHERE Photos.review_id = Reviews.review_id) AS Photos
     FROM Reviews
     WHERE Reviews.product_id = ${id};`
-      )
+      )    //   (SELECT reviewerName FROM Users WHERE Users.review_id = Reviews.review_id) AS reviewer,
   },
-
-
-
-  // CREATE TABLE Reviews (
-  //   review_id INT PRIMARY KEY,
-  //   product_id INT,
-  //   rating INT,
-  //   summary TEXT,
-  //   recommend TEXT,
-  //   response TEXT,
-  //   body TEXT,
-  //   "date" DATE,
-  //   helpfulness INT
-  // );
-  //   -- FOREIGN KEY (product_id)
-  //   -- REFERENCES Products(product_id)
-
-  // CREATE TABLE Photos (
-  //   image_id INT PRIMARY KEY,
-  //   review_id INT,
-  //   "url" TEXT
-
-
-  getReviewsByMetric: function(productAndMetric) { // Essential
-    return; // client.query(``)
+  getReviewsByMetric: function(productAndMetric) {
+    //
+    return;
   },
-  getMetaData: function(id) { // Essential
-    return; // client.query(``)
+  getMetaData: function(id) {
+    let productID = id;
+    return client.query(
+      `SELECT json_build_object(
+          'product_id', 66642,
+          'ratings', json_build_object(
+            '1', (SELECT COUNT(*) FROM Reviews WHERE rating = 1 AND product_id = 66642),
+            '2', (SELECT COUNT(*) FROM Reviews WHERE rating = 2 AND product_id = 66642),
+            '3', (SELECT COUNT(*) FROM Reviews WHERE rating = 3 AND product_id = 66642),
+            '4', (SELECT COUNT(*) FROM Reviews WHERE rating = 4 AND product_id = 66642),
+            '5', (SELECT COUNT(*) FROM Reviews WHERE rating = 5 AND product_id = 66642)
+            ),
+          'recommended', json_build_object(
+            '0', (SELECT COUNT(*) FROM reviews WHERE recommend = '0' AND product_id = 66642),
+            '1', (SELECT COUNT(*) FROM reviews WHERE recommend = '1' AND product_id = 66642)
+            ),
+          'characteristics', json_build_object(
+            'Size', json_build_object(
+                'id', (SELECT characteristic_id FROM Characteristics WHERE name = 'Size' AND product_id = 66642),
+                'value', (SELECT AVG(value) FROM Characteristics_Reviews JOIN Characteristics ON Characteristics_Reviews.characteristic_id = Characteristics.characteristic_id WHERE product_id = 66642 AND name = 'Size')
+            ),
+            'Width', json_build_object(
+              'id', (SELECT characteristic_id FROM Characteristics WHERE name = 'Width' AND product_id = 66642),
+              'value', (SELECT AVG(value) FROM Characteristics_Reviews JOIN Characteristics ON Characteristics_Reviews.characteristic_id = Characteristics.characteristic_id WHERE product_id = 66642 AND name = 'Width')
+            ),
+            'Comfort', json_build_object(
+              'id', (SELECT characteristic_id FROM Characteristics WHERE name = 'Comfort' AND product_id = 66642),
+              'value', (SELECT AVG(value) FROM Characteristics_Reviews JOIN Characteristics ON Characteristics_Reviews.characteristic_id = Characteristics.characteristic_id WHERE product_id = 66642 AND name = 'Comfort')
+            ),
+            'Length', json_build_object(
+              'id', (SELECT characteristic_id FROM Characteristics WHERE name = 'Length' AND product_id = 66642),
+              'value', (SELECT AVG(value) FROM Characteristics_Reviews JOIN Characteristics ON Characteristics_Reviews.characteristic_id = Characteristics.characteristic_id WHERE product_id = 66642 AND name = 'Length')
+            ),
+            'Fit', json_build_object(
+              'id', (SELECT characteristic_id FROM Characteristics WHERE name = 'Fit' AND product_id = 66642),
+              'value', (SELECT AVG(value) FROM Characteristics_Reviews JOIN Characteristics ON Characteristics_Reviews.characteristic_id = Characteristics.characteristic_id WHERE product_id = 66642 AND name = 'Fit')
+            ),
+            'Quality', json_build_object(
+              'id', (SELECT characteristic_id FROM Characteristics WHERE name = 'Quality' AND product_id = 66642),
+              'value', (SELECT AVG(value) FROM Characteristics_Reviews JOIN Characteristics ON Characteristics_Reviews.characteristic_id = Characteristics.characteristic_id WHERE product_id = 66642 AND name = 'Quality')
+            )
+          )
+      );`
+      );
   },
   markAsHelpful: function(id) {
     return; // client.query(``)
@@ -66,30 +84,21 @@ const rarModel = {
 
 module.exports = rarModel;
 
-// The expected return for a review lookup by ID
-// {
-//   "product": "2",
-//   "page": 0,
-//   "count": 5,
-//   "results": [
-//     {
-//       +"review_id": 5,
-//       +"rating": 3,
-//       +"summary": "I'm enjoying wearing these shades",
-//       +"recommend": false,
-//       +"response": null,
-//       +"body": "Comfortable and practical.",
-//       +"date": "2019-04-14T00:00:00.000Z",
-//       -"reviewer_name": "shortandsweeet",
-//       +"helpfulness": 5,
-//       -"photos": [{
-//           "id": 1,
-//           "url": "urlplaceholder/review_5_photo_number_1.jpg"
-//         },
-//         {
-//           "id": 2,
-//           "url": "urlplaceholder/review_5_photo_number_2.jpg"
-//         },
-//         // ...
-//       ]
-//     }
+
+// sub objects(#)
+//         characteristics
+//           sub objects
+//             sub...
+// `SELECT
+// product_id,
+// (SELECT json_build_object(
+//   '1', (SELECT COUNT(*) FROM Reviews WHERE rating = 1),
+//   '2', (SELECT COUNT(*) FROM Reviews WHERE rating = 2),
+//   '3', (SELECT COUNT(*) FROM Reviews WHERE rating = 3),
+//   '4', (SELECT COUNT(*) FROM Reviews WHERE rating = 4),
+//   '5', (SELECT COUNT(*) FROM Reviews WHERE rating = 5)
+// )
+// FROM Reviews
+// WHERE Reviews.product_id = ${parseInt(id)}) AS ratings
+// FROM Reviews
+// WHERE Reviews.product_id = ${parseInt(id)};`
