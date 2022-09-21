@@ -102,23 +102,3 @@ const rarModel = {
 }
 
 module.exports = rarModel;
-
-
-// return client.query(
-//   `SELECT
-//     review_id,
-//     rating,
-//     summary,
-//     recommend,
-//     response,
-//     body,
-//     date,
-//     helpfulness,
-//     (SELECT json_agg(json_build_object(
-//       'id', Photos.image_id,
-//       'url', Photos.url))
-//     FROM Photos
-//     WHERE Photos.review_id = Reviews.review_id) AS Photos
-//   FROM Reviews
-//   WHERE Reviews.product_id = ${id};`
-//     )
