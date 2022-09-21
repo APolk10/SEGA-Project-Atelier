@@ -36,14 +36,7 @@ class RatingsReviews extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.product !== prevProps.product) {
-      axios.get('https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfc/reviews', {
-        headers: {'Authorization': `${API_KEY}`},
-        params: {
-          count: 50,
-          // page: 1,
-          product_id: this.props.product.id,
-          sort: 'relevant'
-        }})
+      axios.get(`http://localhost:8080/reviews/${this.props.product.id}`) // edited to allow express access to id
       .then((res) => {
         this.setState({reviews: res.data.results})
         this.allReviews = res.data.results
@@ -52,22 +45,16 @@ class RatingsReviews extends React.Component {
         console.log(err));
     }
   }
-
+ // currently not working correctly, express is not even receiving this request
   handleSort(e) {
     handleInteractions(e, 'Reviews');
     e.preventDefault();
     let sortMethod = e.target.value
     this.setState({ sort: sortMethod });
-    axios.get('https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfc/reviews', {
-      headers: {'Authorization': `${API_KEY}`},
-      params: {
-        // count: 10,
-        product_id: this.props.product.id,
-        sort: sortMethod
-      }})
+    axios.get(`http://localhost:8080/sortReviews/${this.props.product.id}/${sortMethod}`) // edited to allow express access to id
     .then((res) => {
       console.log('resorted reviews!')
-      this.setState({ reviews: res.data.results })
+       this.setState({ reviews: res.data.results })
     })
     .catch((err) =>
       console.log(err));
