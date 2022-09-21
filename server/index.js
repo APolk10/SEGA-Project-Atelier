@@ -12,7 +12,7 @@ app.use(express.static('./public'))
 
 // GET reviews
 app.get('/reviews/:productID', (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   let selectedProduct = req.params;
   Rar.getReviews(selectedProduct)
     .then((results) => res.status(200).send(results.rows[0].json_build_object)) // array of objects
@@ -20,7 +20,7 @@ app.get('/reviews/:productID', (req, res) => {
 });
 // Sort reviews
 app.get('/sortReviews/:productID/:sortType', (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   let selectedProduct = req.params;
   Rar.getSortedReviews(selectedProduct)
     .then((reviews) => res.status(200).send(reviews))
@@ -28,7 +28,7 @@ app.get('/sortReviews/:productID/:sortType', (req, res) => {
 });
 // GET metadata
 app.get('/reviews/meta/:productID', (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   let selectedProduct = req.params;
   Rar.getMeta(selectedProduct)
     .then((metadata) => res.status(200).send(metadata.rows))
@@ -36,7 +36,7 @@ app.get('/reviews/meta/:productID', (req, res) => {
 });
 // Post new review
 app.post('/addReview', (req, res) => {
-  console.log(req);
+  // console.log(req);
   let newReview = req.body;
   Rar.addNewReview(newReview)
     .then((results) => res.status(201).send('Review Added'))
@@ -44,7 +44,7 @@ app.post('/addReview', (req, res) => {
 });
 // Post helpful
 app.put(`/reviews/helpful`, (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   let productToPromote = req.body;
   Rar.logHelpfulReview(productToPromote)
     .then((results) => console.log('DB sent back incremented helpful counter in this format:', results))
@@ -52,7 +52,7 @@ app.put(`/reviews/helpful`, (req, res) => {
 });
 // Report review
 app.put('/reviews/report', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   let productToReport = req.body;
   Rar.reportReview(productToReport)
     .then((results) => console.log('DB sent back reported review confirmation in this format:', results))
