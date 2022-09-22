@@ -1,9 +1,9 @@
-const client = require('../rar_db.js');
+const pool = require('../rar_db.js');
 
 const rarModel = {
 
   getReviewsByID: function(id) {
-    return client.query(
+    return pool.query(
     `SELECT json_build_object(
         'product', ${id},
         'results',
@@ -31,10 +31,10 @@ const rarModel = {
   },
   getReviewsByMetric: function(productAndMetric) {
     // sort database entries that are acquired (like above) by helpfulness, date, and relevance
-   return client.query(`SELECT * FROM Reviews WHERE product_id = 66642 ORDER BY helpfulness DESC`);
+   return pool.query(`SELECT * FROM Reviews WHERE product_id = 66642 ORDER BY helpfulness DESC`);
   },
   getMetaData: function(id) {
-    return client.query(
+    return pool.query(
       `SELECT json_build_object(
           'product_id', ${id},
           'ratings', json_build_object(
@@ -94,7 +94,7 @@ const rarModel = {
       // review.photos, // 8
     ];
     let text = `INSERT INTO Reviews (product_id, rating, summary, recommend, response, body, date, helpfulness) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
-    return client.query(text, params);
+    return pool.query(text, params);
   },
   reportReview: function(id) {
     return; // client.query(``)
