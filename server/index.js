@@ -1,8 +1,10 @@
 const express = require('express');
+const compression = require('compression');
 const cors = require('cors');
 const app = express();
 const Rar = require('./controllers/rarController.js');
 
+app.use(compression());
 app.use(express.urlencoded({
   extended: true,
 }));
