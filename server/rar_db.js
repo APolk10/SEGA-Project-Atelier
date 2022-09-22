@@ -1,6 +1,6 @@
 require('dotenv').config();
 const postgres = require('postgres');
-const { Client } = require('pg');
+const { Client, Pool } = require('pg');
 
 // const sql = postgres({
 //   host: process.env.DB_HOST,
@@ -15,13 +15,13 @@ const { Client } = require('pg');
 // CREATE INDEX find_char_ID_idx ON Characteristics (product_id);
 // CREATE INDEX find_charRev_ID_idx ON Characteristics_Reviews (characteristic_id);
 
-const client = new Client({
+const pool = new Pool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
 })
 
-client.connect();
+// client.connect();
 
- module.exports = client;
+ module.exports = pool;
