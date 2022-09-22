@@ -34,7 +34,7 @@ app.get('/reviews/meta/:productID', (req, res) => {
   let selectedProduct = req.params;
   Rar.getMeta(selectedProduct)
     .then((metadata) => res.status(200).send(metadata.rows))
-    .catch((error) => console.log(error));
+    .catch((error) => res.send(error));
 });
 // Post new review
 app.post('/addReview', (req, res) => {
@@ -42,7 +42,7 @@ app.post('/addReview', (req, res) => {
   let newReview = req.body;
   Rar.addNewReview(newReview)
     .then((results) => res.status(201).send('Review Added'))
-    .catch((error) => console.log(error));
+    .catch((error) => res.send(error));
 });
 // Post helpful
 app.put(`/reviews/helpful`, (req, res) => {
